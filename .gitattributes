@@ -1,2 +1,18 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+
+# Windows 배치 파일은 CRLF, 셸 스크립트는 LF로 받아요
+*.bat text eol=crlf
+*.sh  text eol=lf
+
+# 바이너리 파일
+*.syso  binary
+*.dll   binary
+*.exe   binary
+*.png   binary
+*.ico   binary
+*.woff2 binary
+
+# 직접 작성하지 않은 코드는 GitHub 언어 통계에서 빼요
+vendor/**      linguist-vendored
+third_party/** linguist-vendored

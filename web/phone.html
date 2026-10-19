@@ -1,0 +1,101 @@
+{{define "phone.html"}}<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#141e1a" media="(prefers-color-scheme: dark)">
+<meta name="format-detection" content="telephone=no">
+<meta name="ld-token" content="{{.Token}}">
+<meta name="ld-pc" content="{{.PCName}}">
+<title>LocalDrop</title>
+<link rel="icon" href="/static/favicon.png">
+<link rel="apple-touch-icon" href="/static/apple-touch-icon.png">
+<link rel="manifest" href="/manifest.webmanifest?t={{.Token}}">
+<link rel="stylesheet" href="/static/base.css?v={{.Version}}">
+<link rel="stylesheet" href="/static/phone.css?v={{.Version}}">
+</head>
+<body class="phone">
+<div class="p-app">
+  <header class="p-head">
+    <div class="p-brand"><img src="/static/logo.svg" width="26" height="26" alt=""><span>LocalDrop</span></div>
+    <button class="p-conn" id="connBtn" type="button" title="연결 정보와 설정">
+      <span class="dot" id="connDot"></span>
+      <span class="p-conn-name" id="pcName">{{.PCName}}</span>
+    </button>
+  </header>
+
+  <div class="p-tip" id="homeTip" hidden>
+    <p id="homeTipText"></p>
+    <button class="icon-btn" id="homeTipClose" type="button" aria-label="안내 닫기"></button>
+  </div>
+
+  <main class="p-main">
+    <div class="timeline p-timeline" id="timeline" aria-live="polite"></div>
+    <section class="p-empty" id="empty" hidden>
+      <h1>PC로 보낼 사진이나 파일을 고르세요</h1>
+      <p>보낸 파일은 PC의 저장 폴더에 바로 들어가요.<br>PC에서 보낸 파일과 글도 여기에 나타나요.</p>
+      <div class="p-empty-acts">
+        <button class="btn btn-primary p-big" id="emptyPhotos" type="button">사진·동영상 보내기</button>
+        <button class="btn btn-outline p-big" id="emptyFiles" type="button">다른 파일 보내기</button>
+      </div>
+    </section>
+  </main>
+
+  <div class="p-sheet" id="sheet" role="menu" hidden>
+    <button type="button" role="menuitem" id="pickPhotos"><span class="p-sheet-ico" id="icoPhotos"></span>사진·동영상</button>
+    <button type="button" role="menuitem" id="pickFiles"><span class="p-sheet-ico" id="icoFiles"></span>다른 파일</button>
+  </div>
+
+  <form class="p-composer" id="composer" autocomplete="off">
+    <button type="button" class="p-round p-plus" id="plusBtn" aria-label="사진이나 파일 보내기" aria-expanded="false" aria-controls="sheet"></button>
+    <textarea id="text" rows="1" placeholder="PC로 보낼 글이나 링크" enterkeyhint="enter"></textarea>
+    <button type="submit" class="p-round p-send" id="sendBtn" aria-label="보내기" disabled></button>
+  </form>
+  <input type="file" id="photoInput" accept="image/*,video/*" multiple hidden>
+  <input type="file" id="fileInput" multiple hidden>
+</div>
+
+<div class="viewer" id="viewer" role="dialog" aria-modal="true" aria-label="사진 보기" hidden>
+  <div class="viewer-top">
+    <span class="viewer-name" id="viewerName"></span>
+    <button class="icon-btn" id="viewerClose" type="button" aria-label="닫기"></button>
+  </div>
+  <div class="viewer-img"><img id="viewerImg" alt=""></div>
+  <div class="viewer-bot">
+    <p class="viewer-tip">사진을 길게 누르면 사진 앱에 바로 저장할 수 있어요</p>
+    <a class="btn btn-primary" id="viewerSave" href="#" download>파일로 저장</a>
+  </div>
+</div>
+
+<dialog id="menuDlg">
+  <div class="dlg-head">
+    <h2>연결 정보</h2>
+    <button class="icon-btn" type="button" data-close aria-label="닫기"></button>
+  </div>
+  <div class="dlg-body">
+    <p class="p-menu-status" id="menuStatus"></p>
+    <label class="p-field">
+      <span>이 폰 이름</span>
+      <input id="nameInput" maxlength="30" autocomplete="off">
+      <small>PC 화면에 이 이름으로 보여요.</small>
+    </label>
+    <div class="p-menu-save"><button class="btn btn-primary" id="nameSave" type="button">이름 저장</button></div>
+    <h3>다음부터 바로 열려면</h3>
+    <p id="menuHomeHelp"></p>
+    <p class="p-ver">LocalDrop {{.Version}}</p>
+  </div>
+</dialog>
+
+<div class="p-gone" id="resetNotice" hidden>
+  <img src="/static/logo.svg" width="48" height="48" alt="">
+  <h1>QR 코드를 다시 찍어 주세요</h1>
+  <p>PC에서 연결을 초기화해서 이 주소는 더 이상 쓸 수 없어요. PC의 LocalDrop 화면에 있는 새 QR 코드를 휴대폰 카메라로 찍으면 다시 연결돼요.</p>
+</div>
+
+<div class="toast" id="toast" role="status" hidden></div>
+<script src="/static/common.js?v={{.Version}}"></script>
+<script src="/static/phone.js?v={{.Version}}"></script>
+</body>
+</html>{{end}}

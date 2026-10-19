@@ -1,0 +1,711 @@
+/* LocalDrop PC 화면 */
+
+body.pc {
+  overflow: hidden;
+}
+
+.app {
+  display: grid;
+  grid-template-columns: 336px minmax(0, 1fr);
+  height: 100vh;
+}
+
+/* ---------- 왼쪽 ---------- */
+
+.rail {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  padding: 18px 20px 12px;
+  background: var(--surface);
+  border-right: 1px solid var(--line);
+  overflow-y: auto;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 16px 2px;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.brand img {
+  border-radius: 8px;
+}
+
+/* 표처럼 생긴 QR 카드: 이 화면에서 가장 중요한 것 */
+.ticket {
+  --notch: var(--surface);
+  flex: none;
+  border-radius: 20px;
+  background: var(--ticket);
+  color: var(--ticket-ink);
+}
+
+.ticket-top {
+  padding: 18px 20px 16px;
+  text-align: center;
+}
+
+.ticket h1 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.qr-frame {
+  display: grid;
+  place-items: center;
+  width: 224px;
+  height: 224px;
+  margin: 14px auto 0;
+  padding: 14px;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 0 0 1px rgb(13 59 43 / 0.07);
+}
+
+.qr-frame img {
+  display: block;
+  width: 196px;
+  height: 196px;
+}
+
+.qr-off {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ticket-ink);
+  padding: 0 8px;
+}
+
+.ticket-perf {
+  position: relative;
+  height: 2px;
+  margin: 0 18px;
+  background-image: linear-gradient(to right, rgb(13 59 43 / 0.26) 55%, transparent 0);
+  background-size: 11px 2px;
+}
+
+.ticket-perf::before,
+.ticket-perf::after {
+  content: "";
+  position: absolute;
+  top: -10px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--notch);
+}
+
+.ticket-perf::before {
+  left: -29px;
+}
+
+.ticket-perf::after {
+  right: -29px;
+}
+
+.ticket-bottom {
+  padding: 13px 20px 15px;
+}
+
+.ticket-pc {
+  font-size: 16px;
+  font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ticket-addr {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin-top: 1px;
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+  color: rgb(13 59 43 / 0.78);
+}
+
+.ticket-addr span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mini-btn {
+  appearance: none;
+  flex: none;
+  border: 0;
+  background: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  color: inherit;
+}
+
+.mini-btn:hover {
+  background: rgb(13 59 43 / 0.08);
+}
+
+.mini-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+.addr-pick {
+  display: grid;
+  gap: 4px;
+  margin-top: 10px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.addr-pick select {
+  padding: 6px 8px;
+  border-radius: 8px;
+  border: 1px solid rgb(13 59 43 / 0.2);
+  background: #fff;
+  color: #10201a;
+  font-size: 13px;
+}
+
+.rail-note {
+  margin: 10px 4px 20px;
+  font-size: 13px;
+  color: var(--ink-2);
+}
+
+.rail-sec {
+  margin-bottom: 18px;
+}
+
+.rail-sec h2 {
+  margin: 0 0 8px 2px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-2);
+}
+
+.devices {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 4px;
+}
+
+.devices li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 4px;
+}
+
+.dev-ico {
+  flex: none;
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: var(--surface-2);
+  color: var(--ink-2);
+}
+
+.dev-ico svg {
+  width: 18px;
+  height: 18px;
+}
+
+.devices li.on .dev-ico {
+  background: var(--go-soft);
+  color: var(--go);
+}
+
+.devices li.on .dev-ico::after {
+  content: "";
+  position: absolute;
+  right: -2px;
+  bottom: -2px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--go);
+  border: 2px solid var(--surface);
+}
+
+.dev-text {
+  display: grid;
+  min-width: 0;
+}
+
+.dev-name {
+  font-size: 14px;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dev-state {
+  font-size: 12px;
+  color: var(--ink-3);
+}
+
+.devices li.on .dev-state {
+  color: var(--go);
+  font-weight: 600;
+}
+
+.devices .none {
+  font-size: 13px;
+  color: var(--ink-3);
+  padding: 2px 4px;
+}
+
+.path-btn {
+  appearance: none;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface-2);
+  text-align: left;
+  color: var(--ink);
+}
+
+.path-btn:hover {
+  border-color: var(--go);
+}
+
+.path-ico {
+  flex: none;
+  color: var(--go);
+  display: grid;
+}
+
+.path-text {
+  min-width: 0;
+  font-size: 13px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  direction: rtl;
+  text-align: left;
+}
+
+.rail-foot {
+  margin-top: auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
+}
+
+.foot-btn {
+  appearance: none;
+  border: 0;
+  background: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-2);
+}
+
+.foot-btn svg {
+  width: 17px;
+  height: 17px;
+}
+
+.foot-btn:hover {
+  background: var(--surface-2);
+  color: var(--ink);
+}
+
+.foot-btn.danger {
+  color: var(--danger);
+}
+
+/* ---------- 오른쪽 ---------- */
+
+.stage {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+}
+
+.pc-timeline {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 10px 28px 24px;
+}
+
+.pc-timeline .acts .text-btn {
+  font-size: 12.5px;
+}
+
+.pc-empty {
+  position: absolute;
+  inset: 0 0 92px 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 clamp(28px, 9vw, 120px);
+  pointer-events: none;
+}
+
+.pc-empty h2 {
+  margin: 0 0 10px;
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.pc-empty p {
+  margin: 0;
+  max-width: 34em;
+  color: var(--ink-2);
+}
+
+.composer {
+  flex: none;
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  margin: 0 24px 20px;
+  padding: 7px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+}
+
+.composer:focus-within {
+  border-color: var(--go);
+}
+
+.attach {
+  flex: none;
+  width: 42px;
+  height: 42px;
+  border: 0;
+  border-radius: 11px;
+  background: none;
+  display: grid;
+  place-items: center;
+  color: var(--ink-2);
+}
+
+.attach:hover {
+  background: var(--surface-2);
+  color: var(--go);
+}
+
+.attach svg {
+  width: 22px;
+  height: 22px;
+}
+
+.composer textarea {
+  flex: 1;
+  min-width: 0;
+  max-height: 180px;
+  border: 0;
+  outline: none;
+  resize: none;
+  background: none;
+  padding: 10px 4px;
+  line-height: 1.45;
+}
+
+.send {
+  flex: none;
+  height: 42px;
+  padding: 0 18px;
+  border-radius: 11px;
+}
+
+.send:disabled {
+  background: var(--surface-2);
+  color: var(--ink-3);
+  opacity: 1;
+}
+
+/* ---------- 끌어다 놓기 ---------- */
+
+.drop-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  display: grid;
+  place-items: center;
+  background: color-mix(in srgb, var(--bg) 70%, transparent);
+  backdrop-filter: blur(3px);
+}
+
+.drop-card {
+  display: grid;
+  justify-items: center;
+  gap: 4px;
+  padding: 36px 64px;
+  border-radius: 22px;
+  background: var(--surface);
+  border: 2px dashed var(--go);
+  box-shadow: var(--shadow-pop);
+  pointer-events: none;
+}
+
+.drop-card strong {
+  font-size: 20px;
+}
+
+.drop-card span:last-child {
+  color: var(--ink-2);
+  font-size: 14px;
+}
+
+.drop-ico {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  margin-bottom: 8px;
+  border-radius: 16px;
+  background: var(--go-soft);
+  color: var(--go);
+}
+
+.drop-ico svg {
+  width: 28px;
+  height: 28px;
+}
+
+/* ---------- 설정 ---------- */
+
+.set {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 14px 0;
+  border-top: 1px solid var(--line);
+}
+
+.dlg-body > .set:first-child {
+  border-top: 0;
+  padding-top: 6px;
+}
+
+.set-text {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.set-text strong {
+  font-size: 15px;
+}
+
+.set-text span {
+  font-size: 13px;
+  color: var(--ink-2);
+}
+
+.set-path {
+  overflow-wrap: anywhere;
+}
+
+.set-acts {
+  flex: none;
+}
+
+.set.manual {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.set.manual input,
+.set-input {
+  padding: 8px 11px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: var(--surface-2);
+}
+
+.set.manual input {
+  flex: 1;
+}
+
+.set-input {
+  width: 200px;
+  flex: none;
+}
+
+.set.manual input:focus,
+.set-input:focus {
+  outline: none;
+  border-color: var(--go);
+}
+
+.switch {
+  appearance: none;
+  flex: none;
+  position: relative;
+  width: 44px;
+  height: 26px;
+  margin: 0;
+  border-radius: 999px;
+  background: var(--line);
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+
+.switch::before {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.25);
+  transition: transform 0.15s;
+}
+
+.switch:checked {
+  background: var(--go);
+}
+
+.switch:checked::before {
+  transform: translateX(18px);
+}
+
+.ver {
+  margin: 14px 0 0;
+  font-size: 12px;
+  color: var(--ink-3);
+}
+
+/* ---------- 도움말 ---------- */
+
+.help > p {
+  margin: 0 0 14px;
+  color: var(--ink-2);
+}
+
+.help ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  counter-reset: step;
+  display: grid;
+  gap: 14px;
+}
+
+.help li {
+  counter-increment: step;
+  position: relative;
+  padding-left: 38px;
+  font-size: 14px;
+  color: var(--ink-2);
+}
+
+.help li::before {
+  content: counter(step);
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--go-soft);
+  color: var(--go);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.help li strong {
+  display: block;
+  margin-bottom: 2px;
+  font-size: 15px;
+  color: var(--ink);
+}
+
+.help-act {
+  margin-top: 10px;
+}
+
+.help-act svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* ---------- 종료 화면 ---------- */
+
+.bye {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 14vw;
+  background: var(--bg);
+}
+
+.bye img {
+  border-radius: 12px;
+  margin-bottom: 16px;
+}
+
+.bye h1 {
+  margin: 0 0 8px;
+  font-size: 26px;
+  letter-spacing: -0.02em;
+}
+
+.bye p {
+  margin: 0;
+  color: var(--ink-2);
+}
+
+/* 좁은 브라우저 창 */
+@media (max-width: 760px) {
+  body.pc {
+    overflow: auto;
+  }
+  .app {
+    grid-template-columns: 1fr;
+    height: auto;
+    min-height: 100vh;
+  }
+  .rail {
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+    overflow: visible;
+  }
+  .stage {
+    min-height: 70vh;
+  }
+}

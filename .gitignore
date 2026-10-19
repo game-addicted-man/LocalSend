@@ -1,0 +1,18 @@
+# 빌드 결과물 — GitHub에는 올리지 않고 Releases에 첨부해요
+/dist/
+/installer/payload/*.exe
+*.exe
+*.exe.old
+*.exe.new
+
+# 개발 중 테스트용 폴더 (go run . --headless --data ./devdata --save ./devrecv)
+/devdata/
+/devrecv/
+*.log
+
+# 운영체제·편집기
+Thumbs.db
+desktop.ini
+.DS_Store
+.vscode/
+.idea/

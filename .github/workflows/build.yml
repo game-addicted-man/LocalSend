@@ -1,0 +1,43 @@
+# 푸시할 때마다 테스트하고 Windows용 실행 파일·설치 파일을 만듭니다.
+# v로 시작하는 태그(예: v1.1.0)를 올리면 GitHub Releases에 두 파일을 자동으로 첨부해요.
+name: build
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+          cache: false
+
+      - name: 테스트
+        run: go test -mod=vendor ./...
+
+      - name: Windows용 빌드 (LocalDrop.exe, LocalDrop-Setup.exe)
+        run: sh build.sh
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: LocalDrop-windows
+          path: dist/*.exe
+
+      - name: 릴리스에 첨부
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dist/LocalDrop-Setup.exe
+            dist/LocalDrop.exe

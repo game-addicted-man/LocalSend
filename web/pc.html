@@ -1,0 +1,196 @@
+{{define "pc.html"}}<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="ld-admin" content="{{.Admin}}">
+<title>LocalDrop</title>
+<link rel="icon" href="/static/favicon.png">
+<link rel="stylesheet" href="/static/base.css?v={{.Version}}">
+<link rel="stylesheet" href="/static/pc.css?v={{.Version}}">
+</head>
+<body class="pc">
+<div class="app">
+  <aside class="rail">
+    <div class="brand">
+      <img src="/static/logo.svg" width="30" height="30" alt="">
+      <span>LocalDrop</span>
+    </div>
+
+    <section class="ticket" aria-labelledby="ticketTitle">
+      <div class="ticket-top">
+        <h1 id="ticketTitle">휴대폰 카메라로 찍으세요</h1>
+        <div class="qr-frame">
+          <img id="qr" width="196" height="196" alt="폰에서 열 주소가 담긴 QR 코드">
+        </div>
+      </div>
+      <div class="ticket-perf" aria-hidden="true"></div>
+      <div class="ticket-bottom">
+        <div class="ticket-pc" id="pcName"></div>
+        <div class="ticket-addr">
+          <span id="addr"></span>
+          <button class="mini-btn" id="copyAddr" type="button" title="주소 복사" aria-label="주소 복사"></button>
+        </div>
+        <label class="addr-pick" id="addrPickWrap" hidden>
+          <span>다른 주소로 바꾸기</span>
+          <select id="addrPick"></select>
+        </label>
+      </div>
+    </section>
+    <p class="rail-note">같은 와이파이에 연결된 폰에서 열려요. 폰에 앱을 설치하지 않아도 돼요.</p>
+
+    <section class="rail-sec">
+      <h2>연결된 기기</h2>
+      <ul class="devices" id="deviceList"></ul>
+    </section>
+
+    <section class="rail-sec">
+      <h2>받은 파일 저장 위치</h2>
+      <button class="path-btn" id="openSaveDir" type="button" title="저장 폴더 열기">
+        <span class="path-ico" id="saveDirIco"></span>
+        <span class="path-text" id="saveDirText"></span>
+      </button>
+    </section>
+
+    <nav class="rail-foot">
+      <button class="foot-btn" id="openSettings" type="button"><span id="icoSettings"></span>설정</button>
+      <button class="foot-btn" id="openHelp" type="button"><span id="icoHelp"></span>연결이 안 될 때</button>
+      <button class="foot-btn danger" id="quitBtn" type="button" hidden>종료</button>
+    </nav>
+  </aside>
+
+  <main class="stage">
+    <div class="timeline pc-timeline" id="timeline" aria-live="polite"></div>
+    <section class="pc-empty" id="empty" hidden>
+      <h2>폰과 주고받은 것이 여기에 쌓여요</h2>
+      <p>폰에서 사진이나 파일을 보내면 저장 폴더에 바로 들어가고, 여기서 열 수 있어요.<br>
+        폰으로 보낼 파일은 이 창에 끌어다 놓거나 아래 클립 버튼을 누르세요.</p>
+    </section>
+    <form class="composer" id="composer" autocomplete="off">
+      <button type="button" class="attach" id="attachBtn" title="파일 보내기 (이 창에 끌어다 놓아도 돼요)" aria-label="파일 보내기"></button>
+      <textarea id="text" rows="1" placeholder="폰으로 보낼 글이나 링크 (Enter로 보내기, Shift+Enter로 줄바꿈)"></textarea>
+      <button type="submit" class="btn btn-primary send" id="sendBtn" disabled>보내기</button>
+      <input type="file" id="fileInput" multiple hidden>
+    </form>
+  </main>
+</div>
+
+<div class="drop-overlay" id="dropOverlay" hidden>
+  <div class="drop-card">
+    <span class="drop-ico" id="dropIco"></span>
+    <strong>놓으면 폰으로 보내요</strong>
+    <span>폰 화면에 바로 나타나요</span>
+  </div>
+</div>
+
+<dialog id="settingsDlg">
+  <div class="dlg-head">
+    <h2>설정</h2>
+    <button class="icon-btn" type="button" data-close aria-label="닫기"></button>
+  </div>
+  <div class="dlg-body">
+    <div class="set">
+      <div class="set-text">
+        <strong>받은 파일 저장 위치</strong>
+        <span class="set-path" id="setSaveDir"></span>
+      </div>
+      <div class="set-acts">
+        <button class="btn" id="changeSaveDir" type="button">바꾸기</button>
+      </div>
+    </div>
+    <div class="set manual" id="manualDirRow" hidden>
+      <input id="manualDir" placeholder="예: D:\받은파일">
+      <button class="btn btn-primary" id="manualDirSave" type="button">저장</button>
+    </div>
+
+    <label class="set">
+      <span class="set-text">
+        <strong>PC 이름</strong>
+        <span>폰 화면 위쪽에 이 이름으로 보여요.</span>
+      </span>
+      <input class="set-input" id="setPCName" maxlength="40">
+    </label>
+
+    <label class="set">
+      <span class="set-text">
+        <strong>폰에서 보낸 글 자동 복사</strong>
+        <span>받자마자 PC 클립보드에 넣어 둬요. Ctrl+V로 바로 붙여 넣을 수 있어요.</span>
+      </span>
+      <input type="checkbox" class="switch" id="setAutoCopy">
+    </label>
+
+    <label class="set">
+      <span class="set-text">
+        <strong>받으면 알림 표시</strong>
+        <span>LocalDrop 창을 안 보고 있을 때 Windows 알림으로 알려 줘요.</span>
+      </span>
+      <input type="checkbox" class="switch" id="setNotify">
+    </label>
+
+    <label class="set" id="autoStartRow">
+      <span class="set-text">
+        <strong>Windows를 켤 때 자동으로 실행</strong>
+        <span>켜 두면 폰에서 언제든 바로 보낼 수 있어요. 작업 표시줄에 작게 시작해요.</span>
+      </span>
+      <input type="checkbox" class="switch" id="setAutoStart">
+    </label>
+
+    <label class="set" id="sendToRow">
+      <span class="set-text">
+        <strong>탐색기 '보내기' 메뉴에 넣기</strong>
+        <span>파일을 오른쪽 클릭하고 보내기 → LocalDrop을 고르면 바로 폰으로 가요.</span>
+      </span>
+      <input type="checkbox" class="switch" id="setSendTo">
+    </label>
+
+    <div class="set">
+      <div class="set-text">
+        <strong>연결 초기화</strong>
+        <span>새 QR 코드를 만들어요. 지금 연결된 폰은 새 QR을 다시 찍어야 해요.</span>
+      </div>
+      <div class="set-acts"><button class="btn" id="resetPair" type="button">새 QR 만들기</button></div>
+    </div>
+
+    <div class="set">
+      <div class="set-text">
+        <strong>주고받은 기록 지우기</strong>
+        <span>목록만 비워요. 저장 폴더에 받은 파일은 지우지 않아요.</span>
+      </div>
+      <div class="set-acts"><button class="btn btn-danger" id="clearAll" type="button">모두 지우기</button></div>
+    </div>
+    <p class="ver" id="verText"></p>
+  </div>
+</dialog>
+
+<dialog id="helpDlg">
+  <div class="dlg-head">
+    <h2>폰에서 안 열릴 때</h2>
+    <button class="icon-btn" type="button" data-close aria-label="닫기"></button>
+  </div>
+  <div class="dlg-body help">
+    <p>위에서부터 하나씩 확인해 보세요.</p>
+    <ol>
+      <li><strong>같은 와이파이인지 확인해요.</strong> 폰의 와이파이가 꺼져 있거나 LTE/5G로 바뀌어 있으면 PC에 닿지 않아요.</li>
+      <li id="fwItem"><strong>Windows 방화벽에서 LocalDrop을 허용해요.</strong> 처음 실행할 때 뜬 '액세스 허용' 창에서 허용을 누르지 않았다면, 아래 버튼으로 다시 설정할 수 있어요. 관리자 권한을 묻는 창이 뜨면 '예'를 누르세요.
+        <div class="help-act"><button class="btn btn-primary" id="fixFirewall" type="button"><span id="icoShield"></span>방화벽 허용 다시 설정</button></div>
+      </li>
+      <li><strong>네트워크 종류를 '개인'으로 바꿔요.</strong> Windows 설정 → 네트워크 및 인터넷 → 와이파이(또는 이더넷) → 지금 연결된 네트워크에서 '개인 네트워크'를 고르세요.</li>
+      <li><strong>공유기의 게스트 와이파이를 피해요.</strong> 게스트 네트워크나 'AP 격리(기기 간 통신 차단)'가 켜진 와이파이에서는 기기끼리 연결되지 않아요.</li>
+      <li><strong>VPN을 잠시 꺼요.</strong> VPN이 켜져 있으면 PC 주소가 달라질 수 있어요.</li>
+      <li id="addrItem"><strong>다른 주소를 골라 봐요.</strong> PC에 네트워크가 여러 개 있으면 QR 아래 '다른 주소로 바꾸기'에서 바꿀 수 있어요.</li>
+    </ol>
+  </div>
+</dialog>
+
+<div class="bye" id="bye" hidden>
+  <img src="/static/logo.svg" width="44" height="44" alt="">
+  <h1>LocalDrop을 종료했어요</h1>
+  <p>이 탭은 닫아도 돼요. 다시 쓰려면 LocalDrop.exe를 실행하세요.</p>
+</div>
+
+<div class="toast" id="toast" role="status" hidden></div>
+<script src="/static/common.js?v={{.Version}}"></script>
+<script src="/static/pc.js?v={{.Version}}"></script>
+</body>
+</html>{{end}}

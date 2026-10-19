@@ -1,0 +1,33 @@
+{{define "notice.html"}}<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>LocalDrop</title>
+<link rel="icon" href="/static/favicon.png">
+<link rel="stylesheet" href="/static/base.css?v={{.Version}}">
+<style>
+  .notice {
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 32px 28px;
+    max-width: 560px;
+    margin: 0 auto;
+  }
+  .notice img { border-radius: 12px; margin-bottom: 18px; }
+  .notice h1 { margin: 0 0 10px; font-size: 24px; letter-spacing: -0.02em; line-height: 1.3; }
+  .notice p { margin: 0; color: var(--ink-2); font-size: 16px; }
+</style>
+</head>
+<body>
+<main class="notice">
+  <img src="/static/logo.svg" width="48" height="48" alt="">
+  <h1>{{.Title}}</h1>
+  <p>{{.Message}}</p>
+</main>
+</body>
+</html>{{end}}
